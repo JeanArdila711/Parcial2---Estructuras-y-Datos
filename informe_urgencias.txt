@@ -1,0 +1,30 @@
+Numero de pacientes ingresados: 1
+Numero de pacientes que ingresaron por Codigo Azul: 0
+Numero de pacientes que ingresaron por Estabilidad Urgente: 0
+Numero de pacientes que ingresaron por Urgencias Normales: 1
+Numero de pacientes que ingresaron por Urgencias Leves: 0
+
+Informacion de pacientes y salidas: 
+Categoria: Codigo Azul
+Categoria: Estabilidad Urgente
+Categoria: Urgencias Normales
+Categoría de triaje: Codigo Azul
+Número de pacientes ingresados: 0
+Número de pacientes con salidas distintas: 0
+Tipos de salidas para esta categoría: 
+
+Categoría de triaje: Estabilidad Urgente
+Número de pacientes ingresados: 0
+Número de pacientes con salidas distintas: 0
+Tipos de salidas para esta categoría: 
+
+Categoría de triaje: Urgencias Normales
+Número de pacientes ingresados: 0
+Número de pacientes con salidas distintas: 0
+Tipos de salidas para esta categoría: 
+
+Categoría de triaje: Urgencias Leves
+Número de pacientes ingresados: 0
+Número de pacientes con salidas distintas: 0
+Tipos de salidas para esta categoría: 
+
