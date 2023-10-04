@@ -16,12 +16,10 @@ class ColaFIFO:
         return len(self.items) == 0
     
     def tamano(self):
-        return len(self.items) == 0
+        return len(self.items)
     
     def contar_elementos(self):
         return len(self.items)
-    
-    
 
 class SistemaUrgencias:
     def __init__(self):
@@ -43,7 +41,7 @@ class SistemaUrgencias:
 
     def ingresar_paciente(self):
         nombre = input("Ingrese el nombre del paciente: ")
-        print("Codigos de trijae disponibles:")
+        print("Codigos de triaje disponibles:")
         print("1. Codigo Azul")
         print("2. Estabilidad Urgente")
         print("3. Urgencias Normales")
@@ -74,49 +72,53 @@ class SistemaUrgencias:
         paciente.estado_medico.append("Estabilizacion y Monitoreo signos vitales")
 
         print(f"El paciente {paciente.nombre} ha sido atendido y estabilizado. ")
-        tipo_salida = input("Medico especialista, ingrese el tipo de salida: ")
+        
+        # Modifica esta parte para asignar automáticamente el tipo de salida
+        if paciente.codigo_triaje == "Codigo Azul":
+            paciente.salida = "Alta"
+        elif paciente.codigo_triaje == "Estabilidad Urgente":
+            paciente.salida = "Remitido para Hospitalización"
+        elif paciente.codigo_triaje == "Urgencias Normales":
+            paciente.salida = "Alta con medicamento"
+        else:
+            paciente.salida = "Alta Voluntaria"
 
-    def dar_alta_paciente(self, paciente, salida):
-        paciente.salida = salida
-        if salida == "Alta":
+    def dar_alta_paciente(self, paciente):
+        # Modifica esta parte para asignar automáticamente el tipo de salida
+        if paciente.salida == "Alta":
             self.pacientes[paciente.codigo_triaje].desencolar()
             print(f"{paciente.nombre} fue dado de alta.")
-        elif salida == "Alta con medicamento":
+        elif paciente.salida == "Alta con medicamento":
             self.laboratorio.recibir_orden_medicamento(paciente)
-            self.pacientes[paciente.codigo_triage].desencolar()
+            self.pacientes[paciente.codigo_triaje].desencolar()
             print(f"{paciente.nombre} fue dado de alta con medicamento pendiente.")
-        elif salida == "Alta Voluntaria":
-            self.pacientes[paciente.codigo_triage].desencolar()
-            print(f"{paciente.nombre} decidió retirarse voluntariamente antes de recibir la atención médica completa recomendada.")
-        elif salida == "Remitido para Hospitalización":
-            self.pacientes[paciente.codigo_triage].desencolar()
-            print(f"{paciente.nombre} fue remitido para hospitalización.")
-        elif salida == "Remitido a Medico Especialista":
-            self.pacientes[paciente.codigo_triage].desencolar()
-            print(f"{paciente.nombre} fue remitido a un médico especialista.")
-        elif salida == "Morgue":
-            self.pacientes[paciente.codigo_triage].desencolar()
-            print(f"{paciente.nombre} lamentablemente falleció y fue trasladado a la morgue.")
+        elif paciente.salida == "Alta Voluntaria":
+            self.pacientes[paciente.codigo_triaje].desencolar()
+            print(f"{paciente.nombre} decidio retirarse voluntariamente antes de recibir la atención médica completa recomendada.")
+        elif paciente.salida == "Remitido para Hospitalización":
+            self.pacientes[paciente.codigo_triaje].desencolar()
+            print(f"{paciente.nombre} fue remitido para hospitalizacion.")
+        elif paciente.salida == "Remitido a Medico Especialista":
+            self.pacientes[paciente.codigo_triaje].desencolar()
+            print(f"{paciente.nombre} fue remitido a un medico especialista.")
+        elif paciente.salida == "Morgue":
+            self.pacientes[paciente.codigo_triaje].desencolar()
+            print(f"{paciente.nombre} lamentablemente fallecio y fue trasladado a la morgue.")
 
     def generar_informe(self):
-        total_pacientes = sum(cola.contar_elementos() for cola in self.pacientes.values())
-        print(f"Número total de pacientes ingresados: {total_pacientes}")
+        with open("informe_urgencias.txt", "w") as archivo:
+            total_pacientes = sum(cola.contar_elementos() for cola in self.pacientes.values())
+            archivo.write(f"Numero total de pacientes ingresados: {total_pacientes}\n")
 
-        for categoria in self.pacientes.keys():
-            cola = self.pacientes[categoria]
-            cantidad_salidas = sum(1 for paciente in cola.items if paciente.salida != "")
-            tipos_salidas = set(paciente.salida for paciente in cola.items if paciente.salida != "")
+            for categoria in self.pacientes.keys():
+                cola = self.pacientes[categoria]
+                cantidad_salidas = sum(1 for paciente in cola.items if paciente.salida != "")
+                tipos_salidas = set(paciente.salida for paciente in cola.items if paciente.salida != "")
 
-            print(f"Categoría de triaje: {categoria}")
-            print(f"Número de pacientes ingresados: {cola.contar_elementos()}")
-            print(f"Número de pacientes con salidas distintas: {cantidad_salidas}")
-            print(f"Tipos de salidas para esta categoría: {', '.join(tipos_salidas)}")
-
-            with open("informe_urgencias.txt", "a") as archivo:
-                archivo.write(f"Categoría de triaje: {categoria}\n")
-                archivo.write(f"Número de pacientes ingresados: {cola.contar_elementos()}\n")
-                archivo.write(f"Número de pacientes con salidas distintas: {cantidad_salidas}\n")
-                archivo.write(f"Tipos de salidas para esta categoría: {', '.join(tipos_salidas)}\n")
+                archivo.write(f"Categoria de triaje: {categoria}\n")
+                archivo.write(f"Numero de pacientes ingresados: {self.contadores_pacientes[categoria]}\n")
+                archivo.write(f"Numero de pacientes con salidas distintas: {cantidad_salidas}\n")
+                archivo.write(f"Tipos de salidas para esta categoria: {', '.join(tipos_salidas)}\n")
                 archivo.write("\n")
 
 if __name__ == "__main__":
@@ -131,9 +133,6 @@ if __name__ == "__main__":
         while not cola_atencion.esta_vacia():
             paciente = cola_atencion.desencolar()
             sistema.atender_pacientes(paciente)
-            sistema.dar_alta_paciente(paciente, "Alta")
+            sistema.dar_alta_paciente(paciente)
 
     sistema.generar_informe()
-
-
-
