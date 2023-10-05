@@ -73,7 +73,6 @@ class SistemaUrgencias:
 
         print(f"El paciente {paciente.nombre} ha sido atendido y estabilizado. ")
         
-        # Modifica esta parte para asignar automáticamente el tipo de salida
         if paciente.codigo_triaje == "Codigo Azul":
             paciente.salida = "Alta"
         elif paciente.codigo_triaje == "Estabilidad Urgente":
@@ -84,7 +83,6 @@ class SistemaUrgencias:
             paciente.salida = "Alta Voluntaria"
 
     def dar_alta_paciente(self, paciente):
-        # Modifica esta parte para asignar automáticamente el tipo de salida
         if paciente.salida == "Alta":
             self.pacientes[paciente.codigo_triaje].desencolar()
             print(f"{paciente.nombre} fue dado de alta.")
